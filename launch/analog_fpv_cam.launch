@@ -1,0 +1,20 @@
+<launch>
+  <node name="usb_cam" pkg="usb_cam" type="usb_cam_node" output="screen" >
+    <param name="video_device" value="/dev/video2" />
+    <param name="image_width" value="640" />
+    <param name="image_height" value="480" />
+    <param name="pixel_format" value="mjpeg" />
+    <param name="camera_frame_id" value="usb_cam" />
+    <param name="io_method" value="mmap"/>
+  </node>
+  <!-- <node name="image_view" pkg="image_view" type="image_view" respawn="false" output="screen">
+    <remap from="image" to="/usb_cam/image_raw"/>
+    <param name="autosize" value="true" />
+  </node> -->
+
+  <!-- To rectify the video -->
+  <include file="$(find image_undistort)/launch/analog_fpv_undistort.launch"/>
+  <!-- To ROI crop, output will have 384x288 reso with low distortion (edge is cropped out) -->
+  <include file="$(find image_proc)/launch/analog_roi_crop.launch"/>
+
+</launch>
